@@ -1,4 +1,4 @@
-# strawberry-flask-pymongo boilerplate
+# strawberry-flask-pydantic-pymongo boilerplate
 
 This is a boilerplate for a GraphQL API using Strawberry, Flask and PyMongo.
 
