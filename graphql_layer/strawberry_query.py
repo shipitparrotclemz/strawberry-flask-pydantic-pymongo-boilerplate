@@ -4,8 +4,7 @@ import strawberry
 from graphql_layer.pydantic_models.pydantic_types import (
     InputFarmerNameFilter,
     OutputStrawberryFarmer,
-    InputFarmerIdFilter,
-    FarmerRole,
+    InputFarmerIdFilter, FarmerRole,
 )
 from graphql_layer.resolvers.resolvers import (
     resolve_find_farmers_by_name,
@@ -45,10 +44,11 @@ class Query:
     @strawberry.field
     def get_sample_farmer(self, info) -> GraphQLStrawberryFarmer:
         """
+        Sample endpoint
         Returns an output GraphQL Output Type, which is a strawberry type, with a pydantic model as its base
         """
         strawberry_farmer: OutputStrawberryFarmer = OutputStrawberryFarmer(
-            name="Patrick", age=25, role=FarmerRole.grower
+            id="dummy_id", name="Patrick", age=25, role=FarmerRole.grower
         )
         # Use the strawberry type's from_pydantic method to convert the pydantic model to a strawberry type
         graphql_strawberry_farmer: GraphQLStrawberryFarmer = (
