@@ -1,10 +1,21 @@
-import strawberry
+from typing import List, Optional
 
-from graphql_layer.pydantic_models.strawberry_farmers import (
+import strawberry
+from graphql_layer.pydantic_models.pydantic_types import (
+    InputFarmerNameFilter,
+    OutputStrawberryFarmer,
+    InputFarmerIdFilter,
     FarmerRole,
-    StrawberryFarmer,
 )
-from graphql_layer.strawberry_models.graphql_models import (
+from graphql_layer.resolvers.resolvers import (
+    resolve_find_farmers_by_name,
+    resolve_find_farmer_by_id,
+)
+from graphql_layer.strawberry_models.strawberry_input_type import (
+    GraphQLInputFarmerIdFilter,
+    GraphQLInputFarmerNameFilter,
+)
+from graphql_layer.strawberry_models.strawberry_output_types import (
     GraphQLStrawberryFarmer,
 )
 
@@ -36,7 +47,7 @@ class Query:
         """
         Returns an output GraphQL Output Type, which is a strawberry type, with a pydantic model as its base
         """
-        strawberry_farmer: StrawberryFarmer = StrawberryFarmer(
+        strawberry_farmer: OutputStrawberryFarmer = OutputStrawberryFarmer(
             name="Patrick", age=25, role=FarmerRole.grower
         )
         # Use the strawberry type's from_pydantic method to convert the pydantic model to a strawberry type
@@ -45,3 +56,40 @@ class Query:
         )
 
         return graphql_strawberry_farmer
+
+    @strawberry.field
+    def get_farmers_by_name(
+        self, info, input_filter: GraphQLInputFarmerNameFilter
+    ) -> List[GraphQLStrawberryFarmer]:
+        """
+        Returns a list of strawberry farmers, sharing the input name
+        """
+        pydantic_input_filter: InputFarmerNameFilter = input_filter.to_pydantic()
+        farmer_name: str = pydantic_input_filter.name
+        pydantic_farmers: List[OutputStrawberryFarmer] = resolve_find_farmers_by_name(
+            farmer_name
+        )
+        strawberry_farmers: List[GraphQLStrawberryFarmer] = [
+            GraphQLStrawberryFarmer.from_pydantic(pydantic_farmer)
+            for pydantic_farmer in pydantic_farmers
+        ]
+        return strawberry_farmers
+
+    @strawberry.field
+    def get_farmer_by_id(
+        self, info, input_filter: GraphQLInputFarmerIdFilter
+    ) -> Optional[GraphQLStrawberryFarmer]:
+        """
+        Searches for a single strawberry farmer, sharing the input id
+        """
+        pydantic_input_filter: InputFarmerIdFilter = input_filter.to_pydantic()
+        farmer_id: str = pydantic_input_filter.id
+        pydantic_farmer: Optional[OutputStrawberryFarmer] = resolve_find_farmer_by_id(
+            farmer_id
+        )
+        strawberry_farmer: Optional[GraphQLStrawberryFarmer] = (
+            GraphQLStrawberryFarmer.from_pydantic(pydantic_farmer)
+            if pydantic_farmer
+            else None
+        )
+        return strawberry_farmer

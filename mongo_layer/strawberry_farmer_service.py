@@ -6,7 +6,10 @@ from pymongo import MongoClient
 from pymongo.cursor import Cursor
 from pymongo.database import Database
 from pymongo.results import InsertOneResult
-from graphql_layer.pydantic_models.pydantic_types import StrawberryFarmer
+from graphql_layer.pydantic_models.pydantic_types import (
+    OutputStrawberryFarmer,
+    InputStrawberryFarmer,
+)
 from mongo_layer.models.insert_result import InsertResult
 
 
@@ -16,7 +19,7 @@ class StrawberryFarmerDAO(ABC):
     We abstract it here, so that we have the freedom to include more implementations for this
     """
 
-    def create_farmer(self, farmer: StrawberryFarmer) -> InsertResult:
+    def create_farmer(self, farmer: InputStrawberryFarmer) -> InsertResult:
         """
         Creates a farmer in the database
         :param farmer: An input farmer
@@ -24,7 +27,7 @@ class StrawberryFarmerDAO(ABC):
         """
         raise NotImplementedError
 
-    def find_farmer(self, id: str) -> Optional[StrawberryFarmer]:
+    def find_farmer(self, id: str) -> Optional[OutputStrawberryFarmer]:
         """
         Finds a farmer in the database by id
         :param id: The id of the farmer
@@ -32,7 +35,7 @@ class StrawberryFarmerDAO(ABC):
         """
         raise NotImplementedError
 
-    def find_farmers(self, name: str) -> List[StrawberryFarmer]:
+    def find_farmers(self, name: str) -> List[OutputStrawberryFarmer]:
         """
         Finds farmers in the database by name
         - We can have farmers with the same name
@@ -54,7 +57,7 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
     Represents a MongoDB implementation of the StrawberryFarmerDAO
     """
 
-    def create_farmer(self, farmer: StrawberryFarmer) -> InsertResult:
+    def create_farmer(self, farmer: InputStrawberryFarmer) -> InsertResult:
         """
         Creates a farmer in the database
         :param farmer: An input farmer
@@ -70,18 +73,18 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
             success=insert_one_result.acknowledged,
         )
 
-    def find_farmer(self, id: str) -> Optional[StrawberryFarmer]:
+    def find_farmer(self, id: str) -> Optional[OutputStrawberryFarmer]:
         """
         Finds a farmer in the database by id
         :param id: The id of the farmer
         :return: return a StrawberryFarmer if found, else None
         """
-        farmer: Optional[StrawberryFarmer] = self.collection.find_one(
+        farmer: Optional[OutputStrawberryFarmer] = self.collection.find_one(
             {"_id": ObjectId(id)}
         )
         return farmer
 
-    def find_farmers(self, name: str) -> List[StrawberryFarmer]:
+    def find_farmers(self, name: str) -> List[OutputStrawberryFarmer]:
         """
         Finds farmers in the database by name
         - We can have farmers with the same name

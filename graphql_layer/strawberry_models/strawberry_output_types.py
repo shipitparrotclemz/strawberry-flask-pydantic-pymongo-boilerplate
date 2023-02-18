@@ -2,7 +2,7 @@ import strawberry
 from graphql_layer.pydantic_models.pydantic_types import (
     CreateFarmerMutationResponse,
     FarmerRole,
-    StrawberryFarmer,
+    OutputStrawberryFarmer,
 )
 
 """
@@ -19,7 +19,7 @@ This gives us the added benefit of keeping FarmerRole a service-level class, and
 strawberry.enum(FarmerRole, name="GraphQLFarmerRole")
 
 
-@strawberry.experimental.pydantic.type(model=StrawberryFarmer, all_fields=True)
+@strawberry.experimental.pydantic.type(model=OutputStrawberryFarmer, all_fields=True)
 class GraphQLStrawberryFarmer:
     ...
 

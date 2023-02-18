@@ -1,5 +1,9 @@
 from enum import Enum
+from typing import Optional
+
 from pydantic import BaseModel, Field
+
+from mongo_layer.models.insert_result import InsertResult
 
 
 class FarmerRole(str, Enum):
@@ -12,7 +16,21 @@ class FarmerRole(str, Enum):
     grower = "Grower"
 
 
-class StrawberryFarmer(BaseModel):
+class InputStrawberryFarmer(BaseModel):
+    name: str
+    age: int
+    role: FarmerRole
+
+
+class InputFarmerNameFilter(BaseModel):
+    name: str
+
+
+class InputFarmerIdFilter(BaseModel):
+    id: str
+
+
+class OutputStrawberryFarmer(BaseModel):
     id: str = Field(alias="_id")
     name: str
     age: int
@@ -20,4 +38,18 @@ class StrawberryFarmer(BaseModel):
 
 
 class CreateFarmerMutationResponse(BaseModel):
+    id: Optional[str]
     success: bool
+
+    """
+    id can be Optional, if the insert was not successful
+    """
+
+    @staticmethod
+    def from_insert_result(insert_result: InsertResult) -> "CreateFarmerMutationResponse":
+        """
+        Creates a CreateFarmerMutationResponse from a mongo InsertResult
+        """
+        return CreateFarmerMutationResponse(
+            id=insert_result.id, success=insert_result.success
+        )
