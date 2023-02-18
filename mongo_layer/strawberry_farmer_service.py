@@ -47,10 +47,10 @@ class StrawberryFarmerDAO(ABC):
 
 class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
     def __init__(
-        self, mongo_client: MongoClient, database_name: str, collection_name: str
+        self, mongo_client: MongoClient[Dict[str, Any]], database_name: str, collection_name: str
     ):
-        self.mongo_client: MongoClient = mongo_client
-        self.database: Database = self.mongo_client[database_name]
+        self.mongo_client: MongoClient[Dict[str, Any]] = mongo_client
+        self.database: Database[Dict[str, Any]] = self.mongo_client[database_name]
         self.collection = self.database[collection_name]
         # ensure the indexes necessary to support the queries are present
         self.ensure_indexes()
@@ -102,7 +102,7 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
         :param name: The name of the farmer
         :return: return a StrawberryFarmer if found, else None
         """
-        raw_farmer_cursor: Cursor = self.collection.find({"name": name})
+        raw_farmer_cursor: Cursor[Dict[str, Any]] = self.collection.find({"name": name})
         farmers: List[OutputStrawberryFarmer] = [
             OutputStrawberryFarmer.parse_obj(raw_farmer)
             for raw_farmer in raw_farmer_cursor

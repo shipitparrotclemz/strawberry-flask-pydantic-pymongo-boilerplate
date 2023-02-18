@@ -67,17 +67,3 @@ class CreateFarmerMutationResponse(BaseModel):
         return CreateFarmerMutationResponse(
             id=insert_result.id, success=insert_result.success
         )
-
-
-if __name__ == "__main__":
-    """
-    Demonstrates us parsing the payload from mongo into an OutputStrawberryFarmer
-    """
-    mongo_json: dict[str, str] = {
-        "_id": ObjectId(),
-        "name": "John",
-        "age": "30",
-        "role": "Quality Manager",
-    }
-    farmer: OutputStrawberryFarmer = OutputStrawberryFarmer.parse_obj(mongo_json)
-    print(farmer)

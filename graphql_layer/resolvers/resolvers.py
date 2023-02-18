@@ -34,7 +34,7 @@ def resolve_find_farmers_by_name(
     return farmers
 
 
-def resolve_find_farmer_by_id(id: id) -> Optional[OutputStrawberryFarmer]:
+def resolve_find_farmer_by_id(id: str) -> Optional[OutputStrawberryFarmer]:
     """
     A query resolver which finds farmers by name
     """

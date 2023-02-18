@@ -19,6 +19,12 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
+## Type-checking with mypy
+
+```commandline
+dmypy run
+```
+
 ## Spinning up a local mongo instance
 
 Run the following command to spin up a local mongo instance on port 27017, as a background process / daemon
