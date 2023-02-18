@@ -1,0 +1,57 @@
+# strawberry-flask-pymongo boilerplate
+
+This is a boilerplate for a GraphQL API using Strawberry, Flask and PyMongo.
+
+## Setting up the boilerplate
+
+We use python 3.9.6 for this boilerplate
+
+#### Creating a virtual environment and activating it
+
+```commandline
+virtualenv venv -p $(which python3.9)
+source venv/bin/activate
+```
+
+#### Installing requirements
+
+```commandline
+pip3 install -r requirements.txt
+```
+
+## Running the server on port 5000
+
+```commandline
+(venv) ➜  strawberry_with_flask_pydantic_pymongo git:(master) ✗ python3 main.py
+ * Serving Flask app 'main'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+```
+
+![Spinning up the Flask Server](pictures/spinning_up_the_server.png)
+
+## Making a dummy request to the server - POST `http://localhost:5000/graphql`
+
+POST `http://localhost:5000/graphql`
+
+Graphql Input
+
+```
+query HelloWorld {
+	hello
+}
+```
+
+Graphql Output
+
+```
+{
+	"data": {
+		"hello": "Hello World!"
+	}
+}
+```
+
+![Query to hello](pictures/query_hello.png)
