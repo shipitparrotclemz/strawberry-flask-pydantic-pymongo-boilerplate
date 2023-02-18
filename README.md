@@ -276,3 +276,9 @@ Graphql Output
 ```
 
 ![Query to getFarmerById](pictures/query_get_farmer_by_id.png)
+
+## Credits
+
+My beloved colleague and mentor: @https://github.com/thejaminator
+- Most of everything in this boilerplate was taught by him :)
+- And for introducing to the talented and kind open source contributors at strawberry 
