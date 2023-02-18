@@ -19,6 +19,24 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
+## Spinning up a local mongo instance
+
+Run the following command to spin up a local mongo instance on port 27017, as a background process / daemon
+
+```commandline
+mongod --config /usr/local/etc/mongod.conf --fork
+```
+
+We can then connect to our local mongo instance with 
+
+```commandline
+mongo
+```
+
+## Targetting a remote mongo database
+
+Please change `settings.py`'s `MONGO_URL` to your remote mongo's connection string.
+
 ## Running the server on port 5000
 
 ```commandline
