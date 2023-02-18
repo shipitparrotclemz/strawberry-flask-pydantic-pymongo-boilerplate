@@ -50,6 +50,33 @@ Press CTRL+C to quit
 
 ![Spinning up the Flask Server](pictures/spinning_up_the_server.png)
 
+## MongoDB Indexes are created on startup
+
+Specifically, they are ensured in `StrawberryFarmerMongoDAOImpl`'s constructor.
+
+```commandline
+> db.strawberry_farmers.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "strawberry_farmers.strawberry_farmers"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"name" : 1,
+			"_id" : 1
+		},
+		"name" : "name_1__id_1",
+		"ns" : "strawberry_farmers.strawberry_farmers"
+	}
+]
+```
+
 ## Making a dummy request to the server - POST `http://localhost:5000/graphql`
 
 **1. Calling a Query - Getting a string as an output**
