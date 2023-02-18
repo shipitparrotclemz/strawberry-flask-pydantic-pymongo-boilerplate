@@ -4,11 +4,14 @@ from graphql_layer.pydantic_models.pydantic_types import (
     InputStrawberryFarmer,
     InputFarmerNameFilter,
     InputFarmerIdFilter,
+    FarmerRole,
 )
 
 """
 Pass in `is_input` = True to the pydantic model decorator, to tell strawberry that this is an input type
 """
+
+strawberry.enum(FarmerRole, name="GraphQLFarmerRole")
 
 
 @strawberry.experimental.pydantic.type(
