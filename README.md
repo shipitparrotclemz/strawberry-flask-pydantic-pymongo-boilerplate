@@ -34,6 +34,8 @@ Press CTRL+C to quit
 
 ## Making a dummy request to the server - POST `http://localhost:5000/graphql`
 
+**1. Calling a Query - Getting a string as an output**
+
 POST `http://localhost:5000/graphql`
 
 Graphql Input
@@ -55,3 +57,36 @@ Graphql Output
 ```
 
 ![Query to hello](pictures/query_hello.png)
+
+
+**2. Calling a Query - Getting a custom GraphQL Output Type**
+
+POST `http://localhost:5000/graphql`
+
+Graphql Input
+
+```
+query GetSampleFarmer {
+	getSampleFarmer {
+		name
+		age
+		role
+	}
+}
+```
+
+Graphql Output
+
+```
+{
+	"data": {
+		"getSampleFarmer": {
+			"name": "Patrick",
+			"age": 25,
+			"role": "grower"
+		}
+	}
+}
+```
+
+![Query to sampleFarmer](pictures/query_sample_farmer.png)
