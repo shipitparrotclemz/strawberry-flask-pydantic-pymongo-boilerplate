@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class FarmerRole(str, Enum):
@@ -13,6 +13,11 @@ class FarmerRole(str, Enum):
 
 
 class StrawberryFarmer(BaseModel):
+    id: str = Field(alias="_id")
     name: str
     age: int
     role: FarmerRole
+
+
+class CreateFarmerMutationResponse(BaseModel):
+    success: bool
