@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from bson import ObjectId
 from pymongo import MongoClient
@@ -79,8 +79,11 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
         :param id: The id of the farmer
         :return: return a StrawberryFarmer if found, else None
         """
-        farmer: Optional[OutputStrawberryFarmer] = self.collection.find_one(
+        raw_farmer: Optional[Dict[str, Any]] = self.collection.find_one(
             {"_id": ObjectId(id)}
+        )
+        farmer: Optional[OutputStrawberryFarmer] = (
+            OutputStrawberryFarmer.parse_obj(raw_farmer) if raw_farmer else None
         )
         return farmer
 
@@ -91,5 +94,8 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
         :param name: The name of the farmer
         :return: return a StrawberryFarmer if found, else None
         """
-        farmers: Cursor = self.collection.find({"name": name})
-        return list(farmers)
+        raw_farmer_cursor: Cursor = self.collection.find({"name": name})
+        farmers: List[OutputStrawberryFarmer] = [
+            OutputStrawberryFarmer.parse_obj(raw_farmer) for raw_farmer in raw_farmer_cursor
+        ]
+        return farmers

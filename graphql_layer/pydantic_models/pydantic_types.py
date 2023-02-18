@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from bson import ObjectId
+from pydantic import BaseModel, Field, validator
 
 from mongo_layer.models.insert_result import InsertResult
 
@@ -36,6 +37,17 @@ class OutputStrawberryFarmer(BaseModel):
     age: int
     role: FarmerRole
 
+    @validator("id", pre=True)
+    def cast_object_id_to_str_id(cls, v):
+        """
+        Mongo gives us an ObjectId, but we want to return a string
+        Cast it to a str here
+        """
+        if isinstance(v, ObjectId):
+            return str(v)
+        else:
+            return v
+
 
 class CreateFarmerMutationResponse(BaseModel):
     id: Optional[str]
@@ -46,10 +58,26 @@ class CreateFarmerMutationResponse(BaseModel):
     """
 
     @staticmethod
-    def from_insert_result(insert_result: InsertResult) -> "CreateFarmerMutationResponse":
+    def from_insert_result(
+        insert_result: InsertResult,
+    ) -> "CreateFarmerMutationResponse":
         """
         Creates a CreateFarmerMutationResponse from a mongo InsertResult
         """
         return CreateFarmerMutationResponse(
             id=insert_result.id, success=insert_result.success
         )
+
+
+if __name__ == "__main__":
+    """
+    Demonstrates us parsing the payload from mongo into an OutputStrawberryFarmer
+    """
+    mongo_json: dict[str, str] = {
+        "_id": ObjectId(),
+        "name": "John",
+        "age": "30",
+        "role": "Quality Manager",
+    }
+    farmer: OutputStrawberryFarmer = OutputStrawberryFarmer.parse_obj(mongo_json)
+    print(farmer)

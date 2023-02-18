@@ -48,7 +48,7 @@ class Query:
         Returns an output GraphQL Output Type, which is a strawberry type, with a pydantic model as its base
         """
         strawberry_farmer: OutputStrawberryFarmer = OutputStrawberryFarmer(
-            id="dummy_id", name="Patrick", age=25, role=FarmerRole.grower
+            _id="dummy_id", name="Patrick", age=25, role=FarmerRole.grower
         )
         # Use the strawberry type's from_pydantic method to convert the pydantic model to a strawberry type
         graphql_strawberry_farmer: GraphQLStrawberryFarmer = (

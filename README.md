@@ -56,7 +56,7 @@ Press CTRL+C to quit
 
 POST `http://localhost:5000/graphql`
 
-Graphql Input
+Graphql Query
 
 ```
 query HelloWorld {
@@ -81,11 +81,12 @@ Graphql Output
 
 POST `http://localhost:5000/graphql`
 
-Graphql Input
+Graphql Query
 
 ```
 query GetSampleFarmer {
 	getSampleFarmer {
+		_id
 		name
 		age
 		role
@@ -99,6 +100,7 @@ Graphql Output
 {
 	"data": {
 		"getSampleFarmer": {
+			"_id": "dummy_id",
 			"name": "Patrick",
 			"age": 25,
 			"role": "grower"
@@ -108,3 +110,136 @@ Graphql Output
 ```
 
 ![Query to sampleFarmer](pictures/query_sample_farmer.png)
+
+**3. Calling a Mutation - Inserting a Strawberry Farmer**
+
+POST `http://localhost:5000/graphql`
+
+Graphql Mutation
+
+```
+mutation CreateFarmer($input: GraphQLInputStrawberryFarmer!){
+	createFarmer(farmer: $input) {
+		id
+		success
+	}
+}
+```
+
+Graphql Variables
+
+```
+{
+	"input": {
+		"age": 27,
+		"name": "Jaminator",
+		"role": "quality_manager"
+	}
+}
+```
+
+Graphql Output
+
+```
+{
+	"data": {
+		"createFarmer": {
+			"id": "63f0f3e8d66ad990714cfbad",
+			"success": true
+		}
+	}
+}
+```
+
+![Query to sampleFarmer](pictures/query_sample_farmer.png)
+
+
+**4. Calling a Query - Query Farmers by Name**
+
+POST `http://localhost:5000/graphql`
+
+Graphql Query
+
+```
+query FindFarmersByName($input: GraphQLInputFarmerNameFilter!){
+	getFarmersByName(inputFilter: $input) {
+		_id
+		name
+		age
+		role
+	}
+}
+```
+
+Graphql Variables
+
+```
+{
+	"input": {
+		"name": "Jaminator"
+	}
+}
+```
+
+Graphql Output
+
+```
+{
+	"data": {
+		"getFarmersByName": [
+			{
+				"_id": "63f0f3e8d66ad990714cfbad",
+				"name": "Jaminator",
+				"age": 27,
+				"role": "quality_manager"
+			}
+		]
+	}
+}
+```
+
+![Query to getFarmerByNames](pictures/query_get_farmers_by_name.png)
+
+**5. Calling a Query - Query Farmer by Id**
+
+POST `http://localhost:5000/graphql`
+
+Graphql Query
+
+```
+query FindFarmersById($input: GraphQLInputFarmerIdFilter!){
+	getFarmerById(inputFilter: $input) {
+		_id
+		name
+		age
+		role
+	}
+}
+```
+
+Graphql Variables
+
+```
+{
+	"input": {
+		"id": "63f0f3e8d66ad990714cfbad"
+	}
+}
+```
+
+Graphql Output
+
+```
+{
+	"data": {
+		"getFarmerById": {
+			"_id": "63f0f3e8d66ad990714cfbad",
+			"name": "Jaminator",
+			"age": 27,
+			"role": "quality_manager"
+		}
+	}
+}
+```
+
+![Query to getFarmerById](pictures/query_get_farmer_by_id.png)
