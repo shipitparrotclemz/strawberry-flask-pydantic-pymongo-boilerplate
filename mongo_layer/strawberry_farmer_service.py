@@ -52,10 +52,18 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
         self.mongo_client: MongoClient = mongo_client
         self.database: Database = self.mongo_client[database_name]
         self.collection = self.database[collection_name]
+        # ensure the indexes necessary to support the queries are present
+        self.ensure_indexes()
 
     """
     Represents a MongoDB implementation of the StrawberryFarmerDAO
     """
+
+    def ensure_indexes(self) -> None:
+        """
+        Ensures that the indexes are created for the collection
+        """
+        self.collection.create_index([("name", 1), ("_id", 1)])
 
     def create_farmer(self, farmer: InputStrawberryFarmer) -> InsertResult:
         """
@@ -96,6 +104,7 @@ class StrawberryFarmerMongoDAOImpl(StrawberryFarmerDAO):
         """
         raw_farmer_cursor: Cursor = self.collection.find({"name": name})
         farmers: List[OutputStrawberryFarmer] = [
-            OutputStrawberryFarmer.parse_obj(raw_farmer) for raw_farmer in raw_farmer_cursor
+            OutputStrawberryFarmer.parse_obj(raw_farmer)
+            for raw_farmer in raw_farmer_cursor
         ]
         return farmers
